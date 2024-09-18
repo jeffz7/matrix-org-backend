@@ -111,11 +111,11 @@ export class OpenaiService {
   }
 
   private isNode(entry: any): boolean {
-    return entry.identity && entry.labels;
+    return entry?.identity && entry?.labels;
   }
 
   private isRelationship(entry: any): boolean {
-    return entry.start && entry.end && entry.type;
+    return entry?.start && entry?.end && entry?.type;
   }
 
   private formatNode(node: any) {
