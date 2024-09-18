@@ -40,6 +40,7 @@ export class OpenaiService {
       return this.createSuccessResponse(
         'Query executed successfully',
         formattedResult,
+        query,
       );
     } catch (error) {
       return this.handleError(error, question, query, retry);
@@ -164,11 +165,14 @@ export class OpenaiService {
     );
   }
 
-  private createSuccessResponse(message: string, data: any) {
+  private createSuccessResponse(message: string, data: any, query: string) {
     return {
       status: 'success',
       message,
-      data,
+      data: {
+        query,
+        ...data,
+      },
     };
   }
 }
