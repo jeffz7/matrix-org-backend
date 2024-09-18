@@ -10,4 +10,10 @@ export class OpenaiController {
     const response = await this.openaiService.runCypherFlow(question);
     return response.data;
   }
+
+  //   @Get('v2/cypher')
+  //   async getV2CypherQuery(@Query('question') question: string) {
+  //     const response = await this.openaiService.runV2CypherFlow(question);
+  //     return response;
+  //   }
 }
