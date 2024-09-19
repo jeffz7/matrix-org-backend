@@ -23,6 +23,7 @@ export class OpenaiService {
     let query = '';
     try {
       console.log('>>> question: ', question);
+      console.log('>>> history: ', history);
       const cypherQuery = await this.getCypherQueryFromAI(question, history);
       console.log('>>> response from openai', cypherQuery);
 
@@ -65,7 +66,12 @@ export class OpenaiService {
   }
 
   private async createThreadWithMessages(question: string, history: any[]) {
-    const messages = [{ role: 'user', content: question }, ...history];
+    const messages: any = [{ role: 'user', content: question }];
+    if (history.length) {
+      messages.push(...history);
+    }
+    // const messages = [{ role: 'user', content: question }, ...history];
+    console.log('Message to create thread', messages);
     const thread = await this.openai.beta.threads.create({ messages });
     return thread;
   }
@@ -158,7 +164,7 @@ export class OpenaiService {
         { role: 'assistant', content: rawCypher },
         {
           role: 'user',
-          content: `This query returns an error: ${error.message}. Please fix it without any explanations.`,
+          content: `This query syntax has an error: ${error.code}, query: ${rawCypher} . Please fix it without any explanations.`,
         },
       ],
       false,

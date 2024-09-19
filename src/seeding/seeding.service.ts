@@ -58,7 +58,7 @@ export class SeedingService {
     const projectSheet = workbook.getWorksheet('Project Table');
     const projects: Project[] = [];
     projectSheet?.eachRow((row, rowNumber) => {
-      if (rowNumber > 1 && rowNumber < 12) {
+      if (rowNumber > 1) {
         // Skip header row
         projects.push({
           ProjectID: row.getCell(1).value as number,
@@ -186,13 +186,17 @@ export class SeedingService {
       data.projectSkillMappings,
     );
 
+    let currentQuery = ``;
+
     try {
       for (const query of commands) {
+        currentQuery = query;
         await session.run(query);
       }
       console.log('Database seeding completed.');
     } catch (error) {
       console.error('Error during seeding:', error);
+      console.log('>>> failed query', currentQuery);
     } finally {
       await session.close();
     }
