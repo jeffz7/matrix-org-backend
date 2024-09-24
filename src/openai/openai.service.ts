@@ -15,6 +15,18 @@ export class OpenaiService {
     this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
   }
 
+  async runQuery(cypherQuery: string, params: any): Promise<any> {
+    const session = this.neo4jDriver.session();
+    try {
+      const result = await session.run(cypherQuery, params);
+      return result?.records?.map((record) => record.toObject());
+    } catch (error) {
+      throw new Error(`Error executing Cypher query: ${error.message}`);
+    } finally {
+      await session.close();
+    }
+  }
+
   async runCypherFlow(
     question: string,
     history: any[] = [],
